@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Weather Dashboard</h1>
+    </header>
+    <section class="country-section">
+      <button class="country-btn">Turkey</button>
+      <button class="country-btn">USA</button>
+      <button class="country-btn">UK</button>
+    </section>
+
+    <input type="text" id="searchInput" placeholder="Enter city name..." />
+
+    <section id="citylist" class="city-list">
+      <!-- City cards will be dynamically added here -->
+    </section>
+
+    <section class="weather-card">
+      <h2>Şehir Adı</h2>
+      <p>Hava Durumu: --</p>
+      <p>Sıcaklık: --°C</p>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
