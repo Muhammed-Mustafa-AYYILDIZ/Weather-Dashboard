@@ -13,6 +13,8 @@ const citiesByCountry = {
 };
 const countryButtons = document.querySelectorAll('.country-btn');
 const cityList = document.getElementById('cityList');
+const searchResults = document.getElementById('searchResults');
+const searchInput = document.getElementById('searchInput');
 
 function clickCountryButton() {
     const clikkedButton = event.currentTarget;
@@ -33,3 +35,16 @@ function displayCities(cities){
         cityList.appendChild(cityButton); //burası cityList.appendChild(cityButton); //burası cityList'e ekliyor
     });
 }
+searchInput.addEventListener('input', function(event){
+    const searchText = event.target.value.toLowerCase();
+    const matchingCities = [];
+    for (const country in citiesByCountry){
+        const cities = citiesByCountry[country];
+        cities.forEach(function(city){
+            if (city.toLowerCase().includes(searchText)){
+                matchingCities.push(city);
+            }
+        });
+    }
+    displayCities(matchingCities);
+});
