@@ -7,25 +7,20 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="topbar">
     <header class="header">
       <h1>Weather Dashboard</h1>
     </header>
-    
-        <input type="text" id="searchInput" placeholder="Enter city name..." />
-        <ul id="searchResults"></ul>
 
-    <section class="country-section">
-      <button class="country-btn">Turkey</button>
-      <button class="country-btn">USA</button>
-      <button class="country-btn">UK</button>
+    <section class="search-panel">
+      <input type="text" id="searchInput" placeholder="Enter city name..." />
+      <ul id="searchResults" class="search-results">
+        <li>İstanbul</li>
+        <li>Ankara</li>
+      </ul>
     </section>
-
-
-
-    <section id="cityList" class="city-list">
-      <!-- City cards will be dynamically added here -->
-    </section>
-
+  </div>
+  
     <section class="weather-card">
       <h2>Şehir Adı</h2>
       <p>Hava Durumu: --</p>
