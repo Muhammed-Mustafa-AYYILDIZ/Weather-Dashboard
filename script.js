@@ -38,6 +38,7 @@ function displayCities(cities){
 searchInput.addEventListener('input', function(event){
     const searchText = event.target.value.toLowerCase();
     const matchingCities = [];
+    searchResults.innerHTML = ''; // önceki arama sonuçlarını temizliyor
     for (const country in citiesByCountry){
         const cities = citiesByCountry[country];
         cities.forEach(function(city){
