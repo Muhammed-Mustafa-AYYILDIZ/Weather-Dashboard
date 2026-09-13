@@ -1,51 +1,62 @@
-const citiesByCountry = {
-    USA: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'],
-    Canada: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa'],
-    UK: ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow'],
-    Australia: ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide'],
-    Germany: ['Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt'],
-    France: ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice'],
-    Japan: ['Tokyo', 'Osaka', 'Kyoto', 'Hiroshima', 'Sapporo'],
-    India: ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai'],
-    Brazil: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador', 'Fortaleza'],
-    SouthAfrica: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria', 'Port Elizabeth'],
-    Turkey: ['Istanbul', 'Ankara', 'Izmir', 'Bursa', 'Adana','Antalya'],
+const countries = {
+  USA: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'],
+  Canada: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa'],
+  UK: ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow'],
+  Australia: ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide'],
+  Germany: ['Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt'],
+  France: ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice'],
+  Japan: ['Tokyo', 'Osaka', 'Kyoto', 'Hiroshima', 'Sapporo'],
+  India: ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai'],
+  Brazil: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador', 'Fortaleza'],
+  SouthAfrica: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria', 'Port Elizabeth'],
+  Turkey: ['Istanbul', 'Ankara', 'Izmir', 'Bursa', 'Adana', 'Antalya']
 };
-const countryButtons = document.querySelectorAll('.country-btn');
-const cityList = document.getElementById('cityList');
-const searchResults = document.getElementById('searchResults');
+
 const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
 
-function clickCountryButton() {
-    const clikkedButton = event.currentTarget;
-    const country = clikkedButton.textContent;
-    const cities = citiesByCountry[country];
+function showSuggestions() {
+  const value = searchInput.value.trim().toLowerCase();
+  searchResults.innerHTML = '';
+  searchResults.classList.remove('active');
 
-    displayCities(cities);
-}
-countryButtons.forEach(function(button) {
-    button.addEventListener('click', clickCountryButton);//addEventListener ile clickCountryButton fonksiyonunu çağırıyor
-    console.log("Country button clicked");
-});
-function displayCities(cities){
-    cityList.innerHTML = ''; // önceki şehirleri temizliyormuş
-    cities.forEach(function(city){
-        const cityButton = document.createElement('button');
-        cityButton.textContent = city; //burası cityButton.textContent = city; //burası cityButton'un textContent'ini ayarlıyor
-        cityList.appendChild(cityButton); //burası cityList.appendChild(cityButton); //burası cityList'e ekliyor
+  if (!value) return;
+
+  const matchingCities = [];
+
+  for (const country in countries) {
+    const cities = countries[country];
+
+    cities.forEach(function (city) {
+      if (city.toLowerCase().includes(value)) {
+        matchingCities.push(city);
+      }
     });
+  }
+
+  if (matchingCities.length === 0) return;
+
+  matchingCities.slice(0, 6).forEach(function (city) {
+    const listItem = document.createElement('li');
+    listItem.textContent = city;
+
+    listItem.addEventListener('click', function () {
+      searchInput.value = city;
+      searchResults.innerHTML = '';
+      searchResults.classList.remove('active');
+    });
+
+    searchResults.appendChild(listItem);
+  });
+
+  searchResults.classList.add('active');
 }
-searchInput.addEventListener('input', function(event){
-    const searchText = event.target.value.toLowerCase();
-    const matchingCities = [];
-    searchResults.innerHTML = ''; // önceki arama sonuçlarını temizliyor
-    for (const country in citiesByCountry){
-        const cities = citiesByCountry[country];
-        cities.forEach(function(city){
-            if (city.toLowerCase().includes(searchText)){
-                matchingCities.push(city);
-            }
-        });
-    }
-    displayCities(matchingCities);
+
+searchInput.addEventListener('input', showSuggestions);
+
+document.addEventListener('click', function (event) {
+  if (!event.target.closest('.search-panel')) {
+    searchResults.classList.remove('active');
+    searchResults.innerHTML = '';
+  }
 });
