@@ -35,25 +35,79 @@ function countryCodeToFlag(code) {
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
 const cityButtons = document.querySelectorAll('.city-btn');
-const favoriteButtons = document.querySelectorAll('.favorite-city');
+const favoriteList = document.querySelector('.favorite-list');
 const countryArea = document.querySelector('.country-area');
-const countryTrigger = document.querySelector('.country-trigger');
+const mainCountryBtn = document.getElementById('mainCountryBtn');
 const countryItems = document.querySelectorAll('.country-item');
+const cityNameElement = document.getElementById('cityName');
+const favoriteToggle = document.getElementById('favoriteToggle');
 
-function selectCity(cityName) {
-  searchInput.value = cityName;
-  searchResults.innerHTML = '';
-  searchResults.classList.remove('active');
-  countryArea.classList.remove('open');
-  countryItems.forEach(function (item) {
-    item.classList.remove('open');
+const favoriteCitySet = new Set();
+
+function updateCityName(cityName) {
+  cityNameElement.textContent = cityName;
+
+  if (favoriteCitySet.has(cityName)) {
+    favoriteToggle.textContent = '★ Remove from Favorites';
+    favoriteToggle.classList.add('active');
+  } else {
+    favoriteToggle.textContent = '☆ Add to Favorites';
+    favoriteToggle.classList.remove('active');
+  }
+}
+
+function renderFavoriteList() {
+  favoriteList.innerHTML = '';
+
+  favoriteCitySet.forEach(function (cityName) {
+    const favoriteButton = document.createElement('button');
+    favoriteButton.type = 'button';
+    favoriteButton.className = 'favorite-city active';
+    favoriteButton.textContent = cityName;
+
+    favoriteButton.addEventListener('click', function () {
+      searchInput.value = cityName;
+      updateCityName(cityName);
+    });
+
+    favoriteList.appendChild(favoriteButton);
   });
 }
 
-function toggleCountryMenu() {
-  const isOpen = countryArea.classList.contains('open');
-  countryArea.classList.toggle('open', !isOpen);
-  countryTrigger.setAttribute('aria-expanded', String(!isOpen));
+function addFavorite(cityName) {
+  favoriteCitySet.add(cityName);
+  renderFavoriteList();
+  updateCityName(cityName);
+}
+
+function removeFavorite(cityName) {
+  favoriteCitySet.delete(cityName);
+  renderFavoriteList();
+  updateCityName(cityName);
+}
+
+function toggleFavoriteForSelectedCity() {
+  const cityName = cityNameElement.textContent.trim();
+
+  if (cityName === 'City Name') return;
+
+  if (favoriteCitySet.has(cityName)) {
+    removeFavorite(cityName);
+  } else {
+    addFavorite(cityName);
+  }
+}
+
+function selectCity(cityName) {
+  searchInput.value = cityName;
+  updateCityName(cityName);
+  searchResults.innerHTML = '';
+  searchResults.classList.remove('active');
+  countryArea.classList.remove('open');
+  mainCountryBtn.setAttribute('aria-expanded', 'false');
+  countryItems.forEach(function (item) {
+    item.classList.remove('open');
+  });
 }
 
 function showSuggestions() {
@@ -103,22 +157,30 @@ function showSuggestions() {
   searchResults.classList.add('active');
 }
 
-countryTrigger.addEventListener('click', function (event) {
+// Yalnızca Ana Buton için Tıklama Eventi
+mainCountryBtn.addEventListener('click', function (event) {
+  event.preventDefault();
   event.stopPropagation();
-  toggleCountryMenu();
+  countryArea.classList.toggle('open');
+  const isOpen = countryArea.classList.contains('open');
+  mainCountryBtn.setAttribute('aria-expanded', isOpen);
 });
 
+// Ülkelerin şehir menülerini (sağa doğru) hover ile açma mantığı devam ediyor
 countryItems.forEach(function (item) {
-  const countryName = item.querySelector('.country-name');
-
-  countryName.addEventListener('click', function (event) {
-    event.stopPropagation();
+  item.addEventListener('mouseenter', function () {
     countryItems.forEach(function (innerItem) {
       if (innerItem !== item) {
         innerItem.classList.remove('open');
       }
     });
-    item.classList.toggle('open');
+    item.classList.add('open');
+  });
+
+  item.addEventListener('mouseleave', function (event) {
+    if (!item.contains(event.relatedTarget)) {
+      item.classList.remove('open');
+    }
   });
 });
 
@@ -126,16 +188,15 @@ searchInput.addEventListener('input', showSuggestions);
 
 cityButtons.forEach(function (button) {
   button.addEventListener('click', function () {
-    selectCity(button.textContent);
+    selectCity(button.textContent.trim());
   });
 });
 
-favoriteButtons.forEach(function (button) {
-  button.addEventListener('click', function () {
-    selectCity(button.textContent);
-  });
+favoriteToggle.addEventListener('click', function () {
+  toggleFavoriteForSelectedCity();
 });
 
+// Dışarıya tıklanıldığında her şeyi kapatma
 document.addEventListener('click', function (event) {
   const clickedInsideSearch = event.target.closest('.search-panel');
   const clickedInsideCountryArea = event.target.closest('.country-area');
@@ -144,8 +205,12 @@ document.addEventListener('click', function (event) {
     searchResults.classList.remove('active');
     searchResults.innerHTML = '';
     countryArea.classList.remove('open');
+    mainCountryBtn.setAttribute('aria-expanded', 'false');
     countryItems.forEach(function (item) {
       item.classList.remove('open');
     });
   }
 });
+
+renderFavoriteList();
+updateCityName('City Name');
