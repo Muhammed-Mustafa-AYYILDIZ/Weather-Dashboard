@@ -34,6 +34,27 @@ function countryCodeToFlag(code) {
 
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
+const cityButtons = document.querySelectorAll('.city-btn');
+const favoriteButtons = document.querySelectorAll('.favorite-city');
+const countryArea = document.querySelector('.country-area');
+const countryTrigger = document.querySelector('.country-trigger');
+const countryItems = document.querySelectorAll('.country-item');
+
+function selectCity(cityName) {
+  searchInput.value = cityName;
+  searchResults.innerHTML = '';
+  searchResults.classList.remove('active');
+  countryArea.classList.remove('open');
+  countryItems.forEach(function (item) {
+    item.classList.remove('open');
+  });
+}
+
+function toggleCountryMenu() {
+  const isOpen = countryArea.classList.contains('open');
+  countryArea.classList.toggle('open', !isOpen);
+  countryTrigger.setAttribute('aria-expanded', String(!isOpen));
+}
 
 function showSuggestions() {
   const value = searchInput.value.trim().toLowerCase();
@@ -73,9 +94,7 @@ function showSuggestions() {
     listItem.appendChild(flagText);
 
     listItem.addEventListener('click', function () {
-      searchInput.value = item.city;
-      searchResults.innerHTML = '';
-      searchResults.classList.remove('active');
+      selectCity(item.city);
     });
 
     searchResults.appendChild(listItem);
@@ -84,11 +103,49 @@ function showSuggestions() {
   searchResults.classList.add('active');
 }
 
+countryTrigger.addEventListener('click', function (event) {
+  event.stopPropagation();
+  toggleCountryMenu();
+});
+
+countryItems.forEach(function (item) {
+  const countryName = item.querySelector('.country-name');
+
+  countryName.addEventListener('click', function (event) {
+    event.stopPropagation();
+    countryItems.forEach(function (innerItem) {
+      if (innerItem !== item) {
+        innerItem.classList.remove('open');
+      }
+    });
+    item.classList.toggle('open');
+  });
+});
+
 searchInput.addEventListener('input', showSuggestions);
 
+cityButtons.forEach(function (button) {
+  button.addEventListener('click', function () {
+    selectCity(button.textContent);
+  });
+});
+
+favoriteButtons.forEach(function (button) {
+  button.addEventListener('click', function () {
+    selectCity(button.textContent);
+  });
+});
+
 document.addEventListener('click', function (event) {
-  if (!event.target.closest('.search-panel')) {
+  const clickedInsideSearch = event.target.closest('.search-panel');
+  const clickedInsideCountryArea = event.target.closest('.country-area');
+
+  if (!clickedInsideSearch && !clickedInsideCountryArea) {
     searchResults.classList.remove('active');
     searchResults.innerHTML = '';
+    countryArea.classList.remove('open');
+    countryItems.forEach(function (item) {
+      item.classList.remove('open');
+    });
   }
 });

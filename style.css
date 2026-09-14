@@ -28,17 +28,17 @@ body {
   font-size: 2rem;
 }
 
-
-.search-area{
-  display:flex;
-  align-items:flex-start;
+.search-row {
+  display: flex;
+  align-items: flex-start;
   gap: 16px;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 }
 
 .search-panel {
   position: relative;
   max-width: 420px;
+  flex: 1 1 420px;
 }
 
 .search-input {
@@ -47,7 +47,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   background: rgba(10, 14, 20, 0.9);
-  color: #00ceb9fd;
+  color: #f3f7ff;
   font-size: 1rem;
   outline: none;
 }
@@ -96,20 +96,6 @@ body {
   background: rgba(140, 233, 154, 0.12);
 }
 
-.country-row{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 4px;
-}
-.country-btn {
-  padding: 10px 12px;
-  border: 1px solid rgba(167, 245, 155, 0.8);
-  background: linear-gradient(180deg, #182334 0%, #0f1724 100%);
-  color: #f3f7ff;
-  border-radius: 10px;
-  cursor: pointer;
-}
 .search-results li .flag {
   font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
   font-size: 1.2rem;
@@ -118,14 +104,94 @@ body {
   transform: translateY(1px);
 }
 
-.favorite-box {
-  margin-top: 20px;
-  width: 420px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 14px;
+.country-area {
+  position: relative;
+  z-index: 20;
 }
+
+.country-trigger,
+.country-btn,
+.favorite-city,
+.city-btn,
+.country-name {
+  border: 1px solid rgba(167, 245, 155, 0.8);
+  background: linear-gradient(180deg, #182334 0%, #0f1724 100%);
+  color: #f3f7ff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.country-trigger {
+  padding: 10px 14px;
+  min-width: 128px;
+}
+
+.country-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 180px;
+  background: rgba(10, 14, 20, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  display: none;
+}
+
+.country-area.open .country-dropdown {
+  display: block;
+}
+
+.country-item {
+  position: relative;
+}
+
+.country-item:hover .city-menu,
+.country-item.open .city-menu {
+  display: block;
+}
+
+.country-item {
+  position: relative;
+}
+
+.country-name {
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+}
+
+.city-menu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  min-width: 180px;
+  background: rgba(10, 14, 20, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  display: none;
+}
+
+.city-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  background: transparent;
+}
+
+.city-btn:last-child {
+  border-bottom: none;
+}
+
 .favorite-box {
   margin-top: 20px;
   width: 420px;
@@ -135,8 +201,22 @@ body {
   padding: 14px;
 }
 
+.favorite-box h3 {
+  margin: 0 0 12px;
+  color: #a7f59b;
+  font-size: 1rem;
+}
+
+.favorite-city {
+  margin: 0 8px 8px 0;
+  padding: 8px 10px;
+}
+
 .favorite-city:hover,
-.country-btn:hover {
+.country-trigger:hover,
+.country-btn:hover,
+.city-btn:hover,
+.country-name:hover {
   transform: translateY(-1px);
 }
 
