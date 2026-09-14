@@ -12,6 +12,26 @@ const countries = {
   Turkey: ['Istanbul', 'Ankara', 'Izmir', 'Bursa', 'Adana', 'Antalya']
 };
 
+const countryCodes = {
+  USA: 'US',
+  Canada: 'CA',
+  UK: 'GB',
+  Australia: 'AU',
+  Germany: 'DE',
+  France: 'FR',
+  Japan: 'JP',
+  India: 'IN',
+  Brazil: 'BR',
+  SouthAfrica: 'ZA',
+  Turkey: 'TR'
+};
+
+function countryCodeToFlag(code) {
+  const normalized = code.toUpperCase();
+  const codePoints = normalized.split('').map((char) => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+}
+
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
 
@@ -29,19 +49,31 @@ function showSuggestions() {
 
     cities.forEach(function (city) {
       if (city.toLowerCase().includes(value)) {
-        matchingCities.push(city);
+        matchingCities.push({
+          city: city,
+          country: country,
+          flag: countryCodeToFlag(countryCodes[country] || 'GL')
+        });
       }
     });
   }
 
   if (matchingCities.length === 0) return;
 
-  matchingCities.slice(0, 6).forEach(function (city) {
+  matchingCities.slice(0, 6).forEach(function (item) {
     const listItem = document.createElement('li');
-    listItem.textContent = city;
+    const cityText = document.createElement('span');
+    const flagText = document.createElement('span');
+
+    cityText.textContent = `${item.city}, ${item.country}`;
+    flagText.textContent = item.flag;
+    flagText.className = 'flag';
+
+    listItem.appendChild(cityText);
+    listItem.appendChild(flagText);
 
     listItem.addEventListener('click', function () {
-      searchInput.value = city;
+      searchInput.value = item.city;
       searchResults.innerHTML = '';
       searchResults.classList.remove('active');
     });
