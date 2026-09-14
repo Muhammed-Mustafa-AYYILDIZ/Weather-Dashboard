@@ -28,6 +28,14 @@ body {
   font-size: 2rem;
 }
 
+
+.search-area{
+  display:flex;
+  align-items:flex-start;
+  gap: 16px;
+  flex-wrap:wrap;
+}
+
 .search-panel {
   position: relative;
   max-width: 420px;
@@ -88,12 +96,48 @@ body {
   background: rgba(140, 233, 154, 0.12);
 }
 
+.country-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+.country-btn {
+  padding: 10px 12px;
+  border: 1px solid rgba(167, 245, 155, 0.8);
+  background: linear-gradient(180deg, #182334 0%, #0f1724 100%);
+  color: #f3f7ff;
+  border-radius: 10px;
+  cursor: pointer;
+}
 .search-results li .flag {
   font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
   font-size: 1.2rem;
   line-height: 1;
   display: inline-block;
   transform: translateY(1px);
+}
+
+.favorite-box {
+  margin-top: 20px;
+  width: 420px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+}
+.favorite-box {
+  margin-top: 20px;
+  width: 420px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.favorite-city:hover,
+.country-btn:hover {
+  transform: translateY(-1px);
 }
 
 .weather-card {
