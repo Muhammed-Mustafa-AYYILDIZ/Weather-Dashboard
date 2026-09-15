@@ -44,6 +44,54 @@ const favoriteToggle = document.getElementById('favoriteToggle');
 
 const favoriteCitySet = new Set();
 
+const weatherData = {
+  Antalya: { condition: 'Sunny', emoji: '☀️', temperature: 30 },
+  Istanbul: { condition: 'Cloudy', emoji: '☁️', temperature: 24 },
+  Ankara: { condition: 'Windy', emoji: '🌬️', temperature: 19 },
+  Izmir: { condition: 'Clear', emoji: '🌤️', temperature: 28 },
+  Bursa: { condition: 'Rainy', emoji: '🌧️', temperature: 20 },
+  'New York': { condition: 'Snowy', emoji: '❄️', temperature: 2 },
+  'Los Angeles': { condition: 'Sunny', emoji: '☀️', temperature: 27 },
+  Chicago: { condition: 'Rainy', emoji: '🌧️', temperature: 14 },
+  Houston: { condition: 'Stormy', emoji: '⛈️', temperature: 31 },
+  Miami: { condition: 'Warm', emoji: '🌤️', temperature: 29 },
+  Berlin: { condition: 'Cloudy', emoji: '☁️', temperature: 17 },
+  Munich: { condition: 'Rainy', emoji: '🌧️', temperature: 15 },
+  Hamburg: { condition: 'Windy', emoji: '🌬️', temperature: 16 },
+  Frankfurt: { condition: 'Clear', emoji: '🌤️', temperature: 20 },
+  Cologne: { condition: 'Rainy', emoji: '🌧️', temperature: 18 },
+  Paris: { condition: 'Cloudy', emoji: '☁️', temperature: 19 },
+  Lyon: { condition: 'Sunny', emoji: '☀️', temperature: 25 },
+  Marseille: { condition: 'Warm', emoji: '🌤️', temperature: 26 },
+  Nice: { condition: 'Sunny', emoji: '☀️', temperature: 27 },
+  Toulouse: { condition: 'Rainy', emoji: '🌧️', temperature: 18 },
+  London: { condition: 'Rainy', emoji: '🌧️', temperature: 17 },
+  Manchester: { condition: 'Cloudy', emoji: '☁️', temperature: 16 },
+  Birmingham: { condition: 'Windy', emoji: '🌬️', temperature: 18 },
+  Leeds: { condition: 'Rainy', emoji: '🌧️', temperature: 14 },
+  Glasgow: { condition: 'Snowy', emoji: '❄️', temperature: 5 },
+  'Tokyo': { condition: 'Clear', emoji: '🌤️', temperature: 22 },
+  Osaka: { condition: 'Rainy', emoji: '🌧️', temperature: 23 },
+  Kyoto: { condition: 'Cloudy', emoji: '☁️', temperature: 21 },
+  Hiroshima: { condition: 'Sunny', emoji: '☀️', temperature: 26 },
+  Sapporo: { condition: 'Snowy', emoji: '❄️', temperature: 4 },
+  Mumbai: { condition: 'Stormy', emoji: '⛈️', temperature: 30 },
+  Delhi: { condition: 'Sunny', emoji: '☀️', temperature: 33 },
+  Bangalore: { condition: 'Cloudy', emoji: '☁️', temperature: 26 },
+  Hyderabad: { condition: 'Warm', emoji: '🌤️', temperature: 29 },
+  Chennai: { condition: 'Sunny', emoji: '☀️', temperature: 32 },
+  'São Paulo': { condition: 'Rainy', emoji: '🌧️', temperature: 24 },
+  'Rio de Janeiro': { condition: 'Cloudy', emoji: '☁️', temperature: 27 },
+  'Brasília': { condition: 'Clear', emoji: '🌤️', temperature: 22 },
+  Salvador: { condition: 'Sunny', emoji: '☀️', temperature: 29 },
+  Fortaleza: { condition: 'Warm', emoji: '🌤️', temperature: 30 },
+  Johannesburg: { condition: 'Clear', emoji: '🌤️', temperature: 23 },
+  'Cape Town': { condition: 'Windy', emoji: '🌬️', temperature: 18 },
+  Durban: { condition: 'Rainy', emoji: '🌧️', temperature: 25 },
+  Pretoria: { condition: 'Sunny', emoji: '☀️', temperature: 24 },
+  'Port Elizabeth': { condition: 'Clear', emoji: '🌤️', temperature: 21 }
+};
+
 function updateCityName(cityName) {
   cityNameElement.textContent = cityName;
 
@@ -54,6 +102,31 @@ function updateCityName(cityName) {
     favoriteToggle.textContent = '☆ Add to Favorites';
     favoriteToggle.classList.remove('active');
   }
+}
+
+function updateWeather(cityName) {
+  const weatherEmoji = document.getElementById('weatherEmoji');
+  const weatherText = document.getElementById('weatherText');
+  const temperatureText = document.getElementById('temperatureText');
+
+  if (cityName === 'City Name') {
+    weatherEmoji.textContent = '—';
+    weatherEmoji.setAttribute('aria-label', 'No weather data');
+    weatherText.textContent = 'Weather: --';
+    temperatureText.textContent = 'Temperature: --°C';
+    return;
+  }
+
+  const weather = weatherData[cityName] || {
+    condition: 'Clear',
+    emoji: '🌤️',
+    temperature: 22
+  };
+
+  weatherEmoji.textContent = weather.emoji;
+  weatherEmoji.setAttribute('aria-label', `${weather.condition} weather`);
+  weatherText.textContent = `Weather: ${weather.condition}`;
+  temperatureText.textContent = `Temperature: ${weather.temperature}°C`;
 }
 
 function renderFavoriteList() {
@@ -101,6 +174,7 @@ function toggleFavoriteForSelectedCity() {
 function selectCity(cityName) {
   searchInput.value = cityName;
   updateCityName(cityName);
+  updateWeather(cityName);
   searchResults.innerHTML = '';
   searchResults.classList.remove('active');
   countryArea.classList.remove('open');
