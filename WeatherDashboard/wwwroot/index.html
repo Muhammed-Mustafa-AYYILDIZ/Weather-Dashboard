@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="page">
+        <header class="topbar">
+            <h1 class="header-title">Weather Dashboard</h1>
+        </header>
+
+        <div class="search-row">
+            <section class="search-panel">
+                <input type="text"
+                       id="searchInput"
+                       class="search-input"
+                       placeholder="Search engine..."
+                       autocomplete="off" />
+
+                <ul id="searchResults" class="search-results" aria-live="polite"></ul>
+            </section>
+
+            <div class="country-area">
+                <button type="button" id="mainCountryBtn" class="main-country-btn" aria-expanded="false">
+                    Countries <span>▾</span>
+                </button>
+
+                <div class="country-dropdown">
+                    <div class="country-item">
+                        <button type="button" id="subCountryTurkey" class="sub-country-btn">Turkey</button>
+                        <div class="city-menu">
+                            <button type="button" class="city-btn">Antalya</button>
+                            <button type="button" class="city-btn">Istanbul</button>
+                            <button type="button" class="city-btn">Ankara</button>
+                            <button type="button" class="city-btn">Izmir</button>
+                            <button type="button" class="city-btn">Bursa</button>
+                        </div>
+                    </div>
+
+                    <div class="country-item">
+                        <button type="button" id="subCountryUSA" class="sub-country-btn">USA</button>
+                        <div class="city-menu">
+                            <button type="button" class="city-btn">New York</button>
+                            <button type="button" class="city-btn">Los Angeles</button>
+                            <button type="button" class="city-btn">Chicago</button>
+                            <button type="button" class="city-btn">Houston</button>
+                            <button type="button" class="city-btn">Miami</button>
+                        </div>
+                    </div>
+
+                    <div class="country-item">
+                        <button type="button" id="subCountryGermany" class="sub-country-btn">Germany</button>
+                        <div class="city-menu">
+                            <button type="button" class="city-btn">Berlin</button>
+                            <button type="button" class="city-btn">Munich</button>
+                            <button type="button" class="city-btn">Hamburg</button>
+                            <button type="button" class="city-btn">Frankfurt</button>
+                            <button type="button" class="city-btn">Cologne</button>
+                        </div>
+                    </div>
+
+                    <div class="country-item">
+                        <button type="button" id="subCountryFrance" class="sub-country-btn">France</button>
+                        <div class="city-menu">
+                            <button type="button" class="city-btn">Paris</button>
+                            <button type="button" class="city-btn">Lyon</button>
+                            <button type="button" class="city-btn">Marseille</button>
+                            <button type="button" class="city-btn">Nice</button>
+                            <button type="button" class="city-btn">Toulouse</button>
+                        </div>
+                    </div>
+
+                    <div class="country-item">
+                        <button type="button" id="subCountryUK" class="sub-country-btn">UK</button>
+                        <div class="city-menu">
+                            <button type="button" class="city-btn">London</button>
+                            <button type="button" class="city-btn">Manchester</button>
+                            <button type="button" class="city-btn">Birmingham</button>
+                            <button type="button" class="city-btn">Leeds</button>
+                            <button type="button" class="city-btn">Glasgow</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="favorite-box">
+            <h3>Favorite Cities</h3>
+            <div class="favorite-list"></div>
+        </div>
+
+        <section class="weather-card">
+            <div class="weather-header">
+                <h2 id="cityName" class="weather-city">City Name</h2>
+                <button id="favoriteToggle" type="button" class="favorite-toggle">☆ Add to Favorites</button>
+            </div>
+            <p class="weather-text">Weather: --</p>
+            <p class="weather-text">Temperature: --°C</p>
+        </section>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
