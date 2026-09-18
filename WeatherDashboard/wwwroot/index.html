@@ -1,24 +1,31 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weather Dashboard</title>
+    <title>ATMOS — Weather Intelligence</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
     <div class="page">
 
-        <h1 class="header-title">Weather Dashboard</h1>
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-badge"><span class="pulse-dot"></span> LIVE</div>
+                <span class="brand-name">ATMOS</span>
+                <span class="brand-sep">/</span>
+                <span class="live-clock" id="liveClock">--:--</span>
+            </div>
 
-        <div class="top-bar">
-            <!-- Sol: Countries -->
-            <div class="country-area">
-                <button type="button" id="mainCountryBtn" class="main-country-btn">
-                    Countries <span>▾</span>
-                </button>
+            <div class="top-bar">
+                <!-- Sol: Countries -->
+                <div class="country-area">
+                    <button type="button" id="mainCountryBtn" class="main-country-btn">
+                        <span>Explore</span> <span>▾</span>
+                    </button>
                 <div class="country-dropdown">
 
                     <div class="country-item">
@@ -156,25 +163,86 @@
 
             <!-- Sağ: Arama -->
             <div class="search-panel">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search city..." autocomplete="off" />
+                <span class="search-symbol">⌕</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search destination..." autocomplete="off" />
+                <span class="search-shortcut">/</span>
                 <ul id="searchResults" class="search-results"></ul>
             </div>
         </div>
+    </header>
 
-        <!-- Ana weather card -->
-        <div class="weather-card">
-            <div class="weather-emoji" id="weatherEmoji">🌡️</div>
-            <h2 id="cityName" class="weather-city">City Name</h2>
-            <div class="weather-temp" id="weatherTemp">--°C</div>
-            <div class="weather-desc" id="weatherDesc">--</div>
-            <button id="favoriteToggle" type="button" class="favorite-toggle">☆ Add to Favorites</button>
+    <!-- Main Weather Bento Stage -->
+    <div class="weather-card" id="weatherCard">
+        <div class="card-meta">
+            <div class="badge-group">
+                <span class="weather-badge" id="dayNightBadge">🌍 READY</span>
+                <span class="station-badge">ATMOS STATION 01</span>
+            </div>
+            <button id="favoriteToggle" type="button" class="favorite-toggle">☆ Bookmark</button>
         </div>
 
-        <!-- Favorites -->
-        <div class="favorite-box">
-            <h3>Favorite Cities</h3>
-            <div class="favorite-list"></div>
+        <div class="card-hero">
+            <div class="hero-left">
+                <h2 id="cityName" class="weather-city">Select City</h2>
+                <div class="weather-desc" id="weatherDesc">Pick a destination from Explore or search above</div>
+                <div class="weather-temp-wrapper">
+                    <span class="weather-temp" id="weatherTemp">--</span>
+                    <span class="weather-unit">°C</span>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="art-halo">
+                    <span class="weather-emoji" id="weatherEmoji">🌡️</span>
+                </div>
+            </div>
         </div>
+
+        <!-- Telemetry Bento Grid -->
+        <div class="weather-details" id="weatherDetails">
+            <div class="detail-card">
+                <div class="detail-top">
+                    <span class="detail-label">FEELS LIKE</span>
+                    <span class="detail-icon">🌡️</span>
+                </div>
+                <div class="detail-val" id="feelsLike">--°C</div>
+                <span class="detail-caption">Thermal index</span>
+            </div>
+            <div class="detail-card">
+                <div class="detail-top">
+                    <span class="detail-label">HUMIDITY</span>
+                    <span class="detail-icon">💧</span>
+                </div>
+                <div class="detail-val" id="humidity">--%</div>
+                <span class="detail-caption">Moisture level</span>
+            </div>
+            <div class="detail-card">
+                <div class="detail-top">
+                    <span class="detail-label">WIND</span>
+                    <span class="detail-icon">💨</span>
+                </div>
+                <div class="detail-val" id="windSpeed">-- km/h</div>
+                <span class="detail-caption">Surface velocity</span>
+            </div>
+            <div class="detail-card">
+                <div class="detail-top">
+                    <span class="detail-label">PRESSURE</span>
+                    <span class="detail-icon">🧭</span>
+                </div>
+                <div class="detail-val" id="pressure">-- hPa</div>
+                <span class="detail-caption">Barometric state</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorites -->
+    <div class="favorite-box">
+        <div class="fav-header">
+            <h3>PINNED LOCATIONS</h3>
+            <span class="fav-hint">Quick switch</span>
+        </div>
+        <div class="favorite-list"></div>
+    </div>
 
     </div>
     <script src="js/script.js"></script>

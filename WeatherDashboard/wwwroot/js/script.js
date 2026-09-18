@@ -48,10 +48,10 @@ function updateCityName(cityName) {
     cityNameElement.textContent = cityName;
 
     if (favoriteCitySet.has(cityName)) {
-        favoriteToggle.textContent = '★ Remove from Favorites';
+        favoriteToggle.textContent = '★ Bookmarked';
         favoriteToggle.classList.add('active');
     } else {
-        favoriteToggle.textContent = '☆ Add to Favorites';
+        favoriteToggle.textContent = '☆ Bookmark';
         favoriteToggle.classList.remove('active');
     }
 }
@@ -167,9 +167,16 @@ mainCountryBtn.addEventListener('click', function (event) {
     mainCountryBtn.setAttribute('aria-expanded', isOpen);
 });
 
-// Ülkelerin şehir menülerini (sağa doğru) hover ile açma mantığı devam ediyor
+// Ülkelerin şehir menülerini (sağa doğru) pürüzsüz hover ile açma mantığı
+let closeMenuTimeout = null;
+
 countryItems.forEach(function (item) {
     item.addEventListener('mouseenter', function () {
+        if (closeMenuTimeout) {
+            clearTimeout(closeMenuTimeout);
+            closeMenuTimeout = null;
+        }
+
         countryItems.forEach(function (innerItem) {
             if (innerItem !== item) {
                 innerItem.classList.remove('open');
@@ -179,10 +186,23 @@ countryItems.forEach(function (item) {
     });
 
     item.addEventListener('mouseleave', function (event) {
-        if (!item.contains(event.relatedTarget)) {
-            item.classList.remove('open');
+        // Eğer fare alt menüye (şehirlere) veya öğe içine geçtiyse kapatma
+        if (item.contains(event.relatedTarget)) {
+            return;
         }
+
+        // 150ms hoşgörü süresi: kullanıcı imleci sağa kaydırırken menü anında kaybolmaz
+        closeMenuTimeout = setTimeout(function () {
+            item.classList.remove('open');
+        }, 150);
     });
+});
+
+countryArea.addEventListener('mouseenter', function () {
+    if (closeMenuTimeout) {
+        clearTimeout(closeMenuTimeout);
+        closeMenuTimeout = null;
+    }
 });
 
 searchInput.addEventListener('input', showSuggestions);
@@ -217,6 +237,58 @@ renderFavoriteList();
 updateCityName('City Name');
 updateCityName('City Name');
 
+function getWeatherDetails(data) {
+    const iconCode = data.weather && data.weather[0] ? data.weather[0].icon : '';
+    const mainCondition = data.weather && data.weather[0] ? data.weather[0].main.toLowerCase() : '';
+    const desc = data.weather && data.weather[0] ? data.weather[0].description : '';
+
+    // Night detection via icon code ('n' suffix) or sunrise/sunset timestamps
+    const isIconNight = iconCode.endsWith('n');
+    const now = data.dt || Math.floor(Date.now() / 1000);
+    const isSunNight = data.sys && (now < data.sys.sunrise || now > data.sys.sunset);
+    const isNight = isIconNight || isSunNight;
+
+    let emoji = isNight ? '🌙' : '☀️';
+    let theme = isNight ? 'theme-night' : 'theme-day';
+    let timeBadge = isNight ? '🌙 Night' : '☀️ Day';
+
+    if (mainCondition.includes('clear')) {
+        emoji = isNight ? '🌙' : '☀️';
+        theme = isNight ? 'theme-night' : 'theme-sunny';
+    } else if (mainCondition.includes('cloud')) {
+        if (iconCode === '02d') {
+            emoji = '🌤️';
+            theme = 'theme-day';
+        } else if (iconCode === '02n') {
+            emoji = '☁️🌙';
+            theme = 'theme-night';
+        } else {
+            emoji = isNight ? '☁️🌙' : '☁️';
+            theme = isNight ? 'theme-night' : 'theme-cloudy';
+        }
+    } else if (mainCondition.includes('rain') || mainCondition.includes('drizzle')) {
+        emoji = isNight ? '🌧️' : '🌦️';
+        theme = 'theme-rain';
+    } else if (mainCondition.includes('thunder')) {
+        emoji = '⛈️';
+        theme = 'theme-storm';
+    } else if (mainCondition.includes('snow')) {
+        emoji = '❄️';
+        theme = 'theme-snow';
+    } else if (mainCondition.includes('mist') || mainCondition.includes('fog') || mainCondition.includes('haze') || mainCondition.includes('smoke')) {
+        emoji = '🌫️';
+        theme = 'theme-fog';
+    }
+
+    return {
+        emoji,
+        theme,
+        timeBadge,
+        desc: desc || mainCondition || '--',
+        isNight
+    };
+}
+
 async function fetchWeather(cityName) {
     try {
         const response = await fetch(`/api/weather?city=${encodeURIComponent(cityName)}`);
@@ -227,30 +299,81 @@ async function fetchWeather(cityName) {
         }
 
         const data = await response.json();
+        const details = getWeatherDetails(data);
 
+        const cardElement = document.getElementById('weatherCard');
+        const badgeElement = document.getElementById('dayNightBadge');
         const tempElement = document.getElementById('weatherTemp');
         const descElement = document.getElementById('weatherDesc');
         const emojiElement = document.getElementById('weatherEmoji');
+        const feelsLikeEl = document.getElementById('feelsLike');
+        const humidityEl = document.getElementById('humidity');
+        const windSpeedEl = document.getElementById('windSpeed');
+        const pressureEl = document.getElementById('pressure');
+
+        // Apply theme classes
+        if (cardElement) {
+            cardElement.className = `weather-card ${details.theme}`;
+        }
+        document.body.dataset.theme = details.isNight ? 'night' : 'day';
+
+        if (badgeElement) {
+            badgeElement.textContent = details.timeBadge;
+        }
 
         if (tempElement && data.main) {
-            tempElement.textContent = `${Math.round(data.main.temp)}°C`;
+            tempElement.textContent = Math.round(data.main.temp);
         }
 
-        if (descElement && data.weather && data.weather[0]) {
-            descElement.textContent = data.weather[0].description;
+        if (descElement) {
+            descElement.textContent = details.desc;
         }
 
-        if (emojiElement && data.weather && data.weather[0]) {
-            const main = data.weather[0].main.toLowerCase();
-            if (main.includes('clear')) emojiElement.textContent = '☀️';
-            else if (main.includes('cloud')) emojiElement.textContent = '☁️';
-            else if (main.includes('rain')) emojiElement.textContent = '🌧️';
-            else if (main.includes('thunder')) emojiElement.textContent = '⛈️';
-            else if (main.includes('snow')) emojiElement.textContent = '❄️';
-            else if (main.includes('mist') || main.includes('fog')) emojiElement.textContent = '🌫️';
-            else emojiElement.textContent = '🌤️';
+        if (emojiElement) {
+            emojiElement.textContent = details.emoji;
+            emojiElement.classList.remove('emoji-pop');
+            void emojiElement.offsetWidth;
+            emojiElement.classList.add('emoji-pop');
+        }
+
+        if (feelsLikeEl && data.main) {
+            feelsLikeEl.textContent = `${Math.round(data.main.feels_like)}°C`;
+        }
+
+        if (humidityEl && data.main) {
+            humidityEl.textContent = `${data.main.humidity}%`;
+        }
+
+        if (windSpeedEl && data.wind) {
+            const speedKmh = Math.round(data.wind.speed * 3.6);
+            windSpeedEl.textContent = `${speedKmh} km/h`;
+        }
+
+        if (pressureEl && data.main) {
+            pressureEl.textContent = `${data.main.pressure} hPa`;
         }
     } catch (err) {
         console.error('Hava durumu isteğinde hata:', err);
     }
 }
+
+// Live Realtime Clock
+function updateClock() {
+    const clockEl = document.getElementById('liveClock');
+    if (!clockEl) return;
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Quick search '/' shortcut
+document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+    }
+});
