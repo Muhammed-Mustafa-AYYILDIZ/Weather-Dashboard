@@ -1,4 +1,4 @@
-﻿const countries = {
+const countries = {
     USA: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'],
     Canada: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa'],
     UK: ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow'],
@@ -218,15 +218,39 @@ updateCityName('City Name');
 updateCityName('City Name');
 
 async function fetchWeather(cityName) {
-    const response = await fetch(`/api/weather?city=${encodeURIComponent(cityName)}`);
+    try {
+        const response = await fetch(`/api/weather?city=${encodeURIComponent(cityName)}`);
 
-    if (!response.ok) {
-        console.error('Hava durumu alınamadı');
-        return;
+        if (!response.ok) {
+            console.error('Hava durumu alınamadı');
+            return;
+        }
+
+        const data = await response.json();
+
+        const tempElement = document.getElementById('weatherTemp');
+        const descElement = document.getElementById('weatherDesc');
+        const emojiElement = document.getElementById('weatherEmoji');
+
+        if (tempElement && data.main) {
+            tempElement.textContent = `${Math.round(data.main.temp)}°C`;
+        }
+
+        if (descElement && data.weather && data.weather[0]) {
+            descElement.textContent = data.weather[0].description;
+        }
+
+        if (emojiElement && data.weather && data.weather[0]) {
+            const main = data.weather[0].main.toLowerCase();
+            if (main.includes('clear')) emojiElement.textContent = '☀️';
+            else if (main.includes('cloud')) emojiElement.textContent = '☁️';
+            else if (main.includes('rain')) emojiElement.textContent = '🌧️';
+            else if (main.includes('thunder')) emojiElement.textContent = '⛈️';
+            else if (main.includes('snow')) emojiElement.textContent = '❄️';
+            else if (main.includes('mist') || main.includes('fog')) emojiElement.textContent = '🌫️';
+            else emojiElement.textContent = '🌤️';
+        }
+    } catch (err) {
+        console.error('Hava durumu isteğinde hata:', err);
     }
-
-    const data = await response.json();
-
-    document.querySelectorAll('.weather-text')[0].textContent = `Weather: ${data.weather[0].description}`;
-    document.querySelectorAll('.weather-text')[1].textContent = `Temperature: ${Math.round(data.main.temp)}°C`;
 }
