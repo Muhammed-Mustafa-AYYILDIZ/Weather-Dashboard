@@ -3,13 +3,24 @@
 <p align="center">
   <img src="https://img.shields.io/badge/.NET-9.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 9" />
   <img src="https://img.shields.io/badge/ASP.NET_Core-Web_API-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="ASP.NET Core" />
+  <img src="https://img.shields.io/badge/Cloudflare_Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare" />
   <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
   <img src="https://img.shields.io/badge/CSS3-Modern_Bento-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
   <img src="https://img.shields.io/badge/OpenWeather-API-EB6E4B?style=for-the-badge&logo=openweathermap&logoColor=white" alt="OpenWeather" />
 </p>
 
 <p align="center">
-  A sleek, high-precision weather dashboard built with <b>ASP.NET Core (.NET 9)</b> and modern frontend design principles. Features an editorial <b>Bento Grid</b> layout, dynamic celestial night/day modes, realtime telemetry metrics, and zero-friction navigation.
+  A sleek, high-precision weather dashboard built with <b>ASP.NET Core (.NET 9)</b>, <b>Cloudflare Serverless</b> and modern frontend design principles. Features an editorial <b>Bento Grid</b> layout, dynamic celestial night/day modes, realtime telemetry metrics, and zero-friction navigation.
+</p>
+
+<p align="center">
+  <a href="https://weather-dashboard.muhammedmustafaayyildiz.workers.dev" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_LIVE_DEMO-TIKLA_VE_CANLI_DENE-00C853?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo" height="42" />
+  </a>
+</p>
+
+<p align="center">
+  👉 <b>Canlı Sürüm:</b> <a href="https://weather-dashboard.muhammedmustafaayyildiz.workers.dev"><b>weather-dashboard.muhammedmustafaayyildiz.workers.dev</b></a>
 </p>
 
 ---
@@ -63,7 +74,16 @@ WeatherDashboard/
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Access (Hemen Dene)
+
+Herhangi bir kurulum yapmadan doğrudan tarayıcınızdan deneyebilirsiniz:
+👉 **[weather-dashboard.muhammedmustafaayyildiz.workers.dev](https://weather-dashboard.muhammedmustafaayyildiz.workers.dev)**
+
+---
+
+## 💻 Local Development (Geliştiriciler İçin)
+
+Projeyi kendi bilgisayarınızda (.NET 9 ile) çalıştırmak isterseniz:
 
 ### Prerequisites
 
