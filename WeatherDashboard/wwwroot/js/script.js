@@ -1,29 +1,46 @@
 const countries = {
-    USA: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'],
+    Turkey: [
+        'Istanbul', 'Ankara', 'Izmir', 'Bursa', 'Antalya',
+        'Giresun', 'Trabzon', 'Samsun', 'Ordu', 'Rize',
+        'Adana', 'Gaziantep', 'Konya', 'Kayseri', 'Eskisehir',
+        'Mersin', 'Diyarbakir', 'Sanliurfa', 'Denizli', 'Sakarya',
+        'Malatya', 'Kahramanmaras', 'Van', 'Erzurum', 'Batman',
+        'Elazig', 'Sivas', 'Manisa', 'Balikesir', 'Canakkale'
+    ],
+    USA: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami', 'Seattle', 'Boston', 'San Francisco', 'Las Vegas'],
+    UK: ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh', 'Liverpool', 'Bristol'],
+    Germany: ['Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Cologne', 'Stuttgart', 'Düsseldorf'],
+    France: ['Paris', 'Lyon', 'Marseille', 'Nice', 'Toulouse', 'Bordeaux', 'Strasbourg'],
+    Italy: ['Rome', 'Milan', 'Venice', 'Florence', 'Naples', 'Turin', 'Bologna'],
+    Spain: ['Madrid', 'Barcelona', 'Seville', 'Valencia', 'Bilbao', 'Malaga'],
+    Japan: ['Tokyo', 'Osaka', 'Kyoto', 'Hiroshima', 'Sapporo', 'Nagoya', 'Fukuoka'],
+    Netherlands: ['Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven'],
+    Switzerland: ['Zurich', 'Geneva', 'Basel', 'Bern', 'Lausanne'],
+    UAE: ['Dubai', 'Abu Dhabi', 'Sharjah'],
     Canada: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa'],
-    UK: ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow'],
     Australia: ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide'],
-    Germany: ['Berlin', 'Hamburg', 'Munich', 'Cologne', 'Frankfurt'],
-    France: ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice'],
-    Japan: ['Tokyo', 'Osaka', 'Kyoto', 'Hiroshima', 'Sapporo'],
-    India: ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai'],
     Brazil: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador', 'Fortaleza'],
-    SouthAfrica: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria', 'Port Elizabeth'],
-    Turkey: ['Istanbul', 'Ankara', 'Izmir', 'Bursa', 'Adana', 'Antalya']
+    SouthKorea: ['Seoul', 'Busan', 'Incheon', 'Daegu'],
+    India: ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai']
 };
 
 const countryCodes = {
+    Turkey: 'TR',
     USA: 'US',
-    Canada: 'CA',
     UK: 'GB',
-    Australia: 'AU',
     Germany: 'DE',
     France: 'FR',
+    Italy: 'IT',
+    Spain: 'ES',
     Japan: 'JP',
-    India: 'IN',
+    Netherlands: 'NL',
+    Switzerland: 'CH',
+    UAE: 'AE',
+    Canada: 'CA',
+    Australia: 'AU',
     Brazil: 'BR',
-    SouthAfrica: 'ZA',
-    Turkey: 'TR'
+    SouthKorea: 'KR',
+    India: 'IN'
 };
 
 function countryCodeToFlag(code) {
@@ -136,7 +153,7 @@ function showSuggestions() {
 
     if (matchingCities.length === 0) return;
 
-    matchingCities.slice(0, 6).forEach(function (item) {
+    matchingCities.slice(0, 8).forEach(function (item) {
         const listItem = document.createElement('li');
         const cityText = document.createElement('span');
         const flagText = document.createElement('span');
@@ -206,6 +223,16 @@ countryArea.addEventListener('mouseenter', function () {
 });
 
 searchInput.addEventListener('input', showSuggestions);
+
+// Enter tuşuna basıldığında doğrudan arama yapma desteği
+searchInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+            selectCity(query);
+        }
+    }
+});
 
 cityButtons.forEach(function (button) {
     button.addEventListener('click', function () {

@@ -228,15 +228,37 @@ body {
     left: 100%;
     top: 0;
     min-width: 190px;
+    max-height: 380px;
+    overflow-y: auto;
     background: rgba(14, 18, 28, 0.98);
     border: 1px solid var(--border-hairline);
     border-radius: 14px;
-    overflow: hidden;
     display: none;
     box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7);
     z-index: 200;
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
+}
+
+.city-menu::-webkit-scrollbar,
+.country-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.city-menu::-webkit-scrollbar-track,
+.country-dropdown::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.city-menu::-webkit-scrollbar-thumb,
+.country-dropdown::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.city-menu::-webkit-scrollbar-thumb:hover,
+.country-dropdown::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .country-item.open .city-menu {
